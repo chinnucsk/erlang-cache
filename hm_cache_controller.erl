@@ -15,8 +15,8 @@ start_link(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 init(Config) ->
-    AdapterName = proplists:get_value(adapter_name, redis),
-    AdapterConfig = proplists:get_value(adapter_config,[]),
+    AdapterName = proplists:get_value(adapter_name,Config,redis),
+    AdapterConfig = proplists:get_value(adapter_config,Config,[]),
     Adapter = list_to_atom(lists:concat(["hm_cache_adapter_", AdapterName])),
     {ok, Conn} = Adapter:init(AdapterConfig),
     {ok, #state{ adapter = Adapter, connection = Conn}}.
