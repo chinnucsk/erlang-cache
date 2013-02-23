@@ -49,5 +49,5 @@ delete(Conn, Prefix, Key) ->
 % internal
 term_to_key(Prefix, Term) ->
     MD5KeyBinary = erlang:md5(erlang:term_to_binary(Term)),
-    MD5KeyList = erlang:binary_to_list(hm_misc:to_hex(MD5KeyBinary)),
+    MD5KeyList = hm_misc:to_hex(MD5KeyBinary),
     lists:concat([Prefix, "_", MD5KeyList]).
