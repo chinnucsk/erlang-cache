@@ -23,9 +23,9 @@ terminate(Conn)->
 
 get(Conn, Prefix, Key) ->
     CacheKey = term_to_key(Prefix,Key),
-    CacheValue = eredis:q(Conn,["GET",CacheKey]),
-    case CacheValue of 
-        <<>> ->
+    {ok,CacheValue} = eredis:q(Conn,["GET",CacheKey]),
+    case CacheValue of
+        undefined->
             undefined;
         Bin ->
             erlang:binary_to_term(Bin)
