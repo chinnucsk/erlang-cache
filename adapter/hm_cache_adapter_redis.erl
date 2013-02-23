@@ -44,7 +44,7 @@ set(Conn, Prefix, Key, Val)->
 
 delete(Conn, Prefix, Key) ->
     CacheKey = term_to_key(Prefix,Key),
-    eredis:q(Conn,["DELETE",CacheKey]).
+    eredis:q(Conn,["DEL",CacheKey]).
 
 % internal
 term_to_key(Prefix, Term) ->
