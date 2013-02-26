@@ -14,15 +14,8 @@ start_link(StartArgs) ->
 
 init(StartArgs) ->
 	RestartStrategy = {one_for_one, 10, 10},
-	DefaultPoolArgs = [
-		{worker_module, hm_cache_controller},
-		{size, 20},
-		{max_overflow, 40}
-		],
-	DefaultPool = {default_cache,DefaultPoolArgs,[]},
-	Pools = [DefaultPool|StartArgs],
 	PoolsSpecs = lists:map(fun({Name,OtherArgs,WorkerArgs})->
 								PoolArgs = [{name,{local,Name}}] ++ OtherArgs,
                                 poolboy:child_spec(Name,PoolArgs,WorkerArgs)
-                            end,Pools),
+                            end,StartArgs),
     {ok, {RestartStrategy, PoolsSpecs}}.
