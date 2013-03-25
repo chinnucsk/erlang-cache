@@ -13,13 +13,13 @@ stop()->
     ok.
 
 set(PoolName,Prefix,Key,Val)->
-    hm_cache_pool:call(PoolName, {set, Prefix, Key, Val}).
+    pool_utils:call(PoolName, {set, Prefix, Key, Val}).
 
 set(PoolName,Prefix, Key, Val, TTL) ->
-    hm_cache_pool:call(PoolName, {set, Prefix, Key, Val, TTL}).
+    pool_utils:call(PoolName, {set, Prefix, Key, Val, TTL}).
 
 get(PoolName,Prefix, Key) ->
-    hm_cache_pool:call(PoolName, {get, Prefix, Key}).
+    pool_utils:call(PoolName, {get, Prefix, Key}).
 
 delete(PoolName,Prefix, Key) ->
-    hm_cache_pool:call(PoolName, {delete, Prefix, Key}).
+    pool_utils:call(PoolName, {delete, Prefix, Key}).
