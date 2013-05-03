@@ -22,32 +22,30 @@ terminate(Conn)->
     eredis:stop(Conn).
 
 get(Conn, Prefix, Key) ->
-    CacheKey = term_to_key(Prefix,Key),
+    CacheKey = get_cache_key(Prefix,Key),
     {ok,CacheValue} = eredis:q(Conn,["GET",CacheKey]),
     case CacheValue of
         undefined->
             {ok,undefined};
         Bin ->
-            {ok,erlang:binary_to_term(Bin)}
+            {ok,Bin}
     end.
 
 set(Conn, Prefix, Key, Val, TTL) ->
-    CacheKey = term_to_key(Prefix,Key),
-    CacheValue = erlang:term_to_binary(Val),
-    eredis:q(Conn,["SET",CacheKey,CacheValue]),
+    CacheKey = get_cache_key(Prefix,Key),
+    eredis:q(Conn,["SET",CacheKey,Val]),
     eredis:q(Conn,["EXPIRE",CacheKey,TTL]).
 
 set(Conn, Prefix, Key, Val)->
-    CacheKey = term_to_key(Prefix,Key),
-    CacheValue = erlang:term_to_binary(Val),
-    eredis:q(Conn,["SET",CacheKey,CacheValue]).
+    CacheKey = get_cache_key(Prefix,Key),
+    eredis:q(Conn,["SET",CacheKey,Val]).
 
 delete(Conn, Prefix, Key) ->
-    CacheKey = term_to_key(Prefix,Key),
+    CacheKey = get_cache_key(Prefix,Key),
     eredis:q(Conn,["DEL",CacheKey]).
 
 % internal
-term_to_key(Prefix, Term) ->
-    MD5KeyBinary = erlang:md5(erlang:term_to_binary(Term)),
+get_cache_key(Prefix, Key) ->
+    MD5KeyBinary = erlang:md5(Key),
     MD5KeyList = hm_string:to_hex(MD5KeyBinary),
     lists:concat([Prefix, "_", MD5KeyList]).
