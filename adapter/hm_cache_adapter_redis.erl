@@ -48,4 +48,4 @@ delete(Conn, Prefix, Key) ->
 get_cache_key(Prefix, Key) ->
     MD5KeyBinary = erlang:md5(Key),
     MD5KeyList = hm_string:to_hex(MD5KeyBinary),
-    lists:concat([Prefix, "_", MD5KeyList]).
+    lists:concat([Prefix, ":", MD5KeyList]).
